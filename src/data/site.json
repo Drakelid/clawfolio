@@ -1,0 +1,81 @@
+{
+  "meta": {
+    "title": "Fredrik Drakelid - Full Stack Developer",
+    "description": "Full stack developer with 8+ years of experience building scalable web applications. Specializing in React, Next.js, Node.js, and cloud infrastructure.",
+    "url": "https://fredrikdrakelid.dev"
+  },
+  "hero": {
+    "name": "Fredrik Drakelid",
+    "role": "Full Stack Developer",
+    "taglines": [
+      "I build scalable APIs",
+      "I craft beautiful UIs",
+      "I ship real products"
+    ],
+    "coordinates": {
+      "lat": "48.8566 N",
+      "lng": "2.3522 E"
+    },
+    "socials": {
+      "github": "https://github.com/fredrikdrakelid",
+      "linkedin": "https://linkedin.com/in/fredrikdrakelid",
+      "twitter": "https://twitter.com/fredrikdrakelid"
+    }
+  },
+  "about": {
+    "bio": [
+      "I'm a full stack developer who thrives at the intersection of design and engineering.",
+      "With 8 years of experience shipping products at companies like Vercel, Stripe, and Figma, I bring a deep understanding of both frontend craft and backend architecture.",
+      "I'm passionate about building tools that developers love and experiences that users remember."
+    ],
+    "stats": [
+      {
+        "label": "Years Experience",
+        "value": 8,
+        "suffix": "+"
+      },
+      {
+        "label": "Projects Shipped",
+        "value": 50,
+        "suffix": "+"
+      },
+      {
+        "label": "Cups of Coffee",
+        "value": 4200,
+        "suffix": "+"
+      }
+    ],
+    "techStack": {
+      "Frontend": [
+        "React",
+        "Next.js",
+        "TypeScript",
+        "Tailwind CSS",
+        "Framer Motion",
+        "Three.js",
+        "Vue.js"
+      ],
+      "Backend": [
+        "Node.js",
+        "Python",
+        "Go",
+        "PostgreSQL",
+        "Redis",
+        "GraphQL",
+        "Docker"
+      ],
+      "Tools": [
+        "Git",
+        "AWS",
+        "Vercel",
+        "Figma",
+        "Linux",
+        "CI/CD",
+        "Terraform"
+      ]
+    }
+  },
+  "contact": {
+    "email": "fredrik@fredrikdrakelid.dev"
+  }
+}

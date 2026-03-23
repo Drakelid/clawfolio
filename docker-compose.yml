@@ -1,0 +1,13 @@
+services:
+  app:
+    build: .
+    ports:
+      - "81:3000"
+    environment:
+      NODE_ENV: production
+      NODE_OPTIONS: --max-old-space-size=2048
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      ADMIN_SECRET: ${ADMIN_SECRET}
+    volumes:
+      - ./src/data:/app/src/data
+    restart: unless-stopped

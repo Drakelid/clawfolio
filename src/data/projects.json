@@ -1,0 +1,86 @@
+[
+  {
+    "id": 1,
+    "title": "CloudSync Dashboard",
+    "description": "A real-time analytics dashboard for monitoring cloud infrastructure. Features live metrics, alerting, and team collaboration tools built for DevOps teams managing multi-cloud environments.",
+    "image": "/projects/cloudsync.jpg",
+    "tags": ["React", "TypeScript", "Node.js", "WebSocket", "PostgreSQL"],
+    "category": "Full Stack",
+    "featured": true,
+    "accent": "#3B82F6",
+    "links": {
+      "live": "https://cloudsync.demo.dev",
+      "github": "https://github.com/alexchen/cloudsync"
+    }
+  },
+  {
+    "id": 2,
+    "title": "NeuralChat AI",
+    "description": "An AI-powered conversational platform with multi-model support, RAG pipelines, and a custom prompt engineering interface. Handles 50K+ daily active users with sub-200ms response times.",
+    "image": "/projects/neuralchat.jpg",
+    "tags": ["Next.js", "Python", "FastAPI", "Redis", "OpenAI"],
+    "category": "Full Stack",
+    "featured": true,
+    "accent": "#8B5CF6",
+    "links": {
+      "live": "https://neuralchat.demo.dev",
+      "github": "https://github.com/alexchen/neuralchat"
+    }
+  },
+  {
+    "id": 3,
+    "title": "Pixel Motion",
+    "description": "A creative coding platform for generative art. Users write shaders and JavaScript sketches that compile to WebGL, with a gallery and social sharing features.",
+    "image": "/projects/pixelmotion.jpg",
+    "tags": ["Three.js", "WebGL", "React", "GLSL"],
+    "category": "Frontend",
+    "featured": false,
+    "accent": "#EC4899",
+    "links": {
+      "live": "https://pixelmotion.demo.dev",
+      "github": "https://github.com/alexchen/pixelmotion"
+    }
+  },
+  {
+    "id": 4,
+    "title": "PayFlow API",
+    "description": "A developer-friendly payment processing API with SDKs for 6 languages, webhook management, and PCI-DSS compliance built in. Powers transactions for 200+ merchants.",
+    "image": "/projects/payflow.jpg",
+    "tags": ["Go", "gRPC", "PostgreSQL", "Docker", "Stripe"],
+    "category": "Backend",
+    "featured": false,
+    "accent": "#10B981",
+    "links": {
+      "live": "https://payflow.demo.dev",
+      "github": "https://github.com/alexchen/payflow"
+    }
+  },
+  {
+    "id": 5,
+    "title": "DevBoard",
+    "description": "A Kanban-style project management tool designed for engineering teams. Features sprint planning, GitHub integration, automated standups, and velocity tracking.",
+    "image": "/projects/devboard.jpg",
+    "tags": ["Next.js", "Prisma", "tRPC", "Tailwind CSS"],
+    "category": "Full Stack",
+    "featured": false,
+    "accent": "#F59E0B",
+    "links": {
+      "live": "https://devboard.demo.dev",
+      "github": "https://github.com/alexchen/devboard"
+    }
+  },
+  {
+    "id": 6,
+    "title": "Healthpulse",
+    "description": "A health and fitness tracking mobile app with workout plans, nutrition logging, and social challenges. Built as a progressive web app with offline support.",
+    "image": "/projects/healthpulse.jpg",
+    "tags": ["React Native", "Expo", "Supabase", "Chart.js"],
+    "category": "Frontend",
+    "featured": false,
+    "accent": "#EF4444",
+    "links": {
+      "live": "https://healthpulse.demo.dev",
+      "github": "https://github.com/alexchen/healthpulse"
+    }
+  }
+]

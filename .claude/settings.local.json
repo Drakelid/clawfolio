@@ -2,7 +2,20 @@
   "permissions": {
     "allow": [
       "Bash(dir)",
-      "WebSearch"
+      "WebSearch",
+      "mcp__Claude_Preview__preview_start",
+      "mcp__Windows-MCP__Snapshot",
+      "mcp__Windows-MCP__App",
+      "mcp__Windows-MCP__Shortcut",
+      "mcp__Windows-MCP__Wait",
+      "mcp__Windows-MCP__Click",
+      "Bash(npx next:*)",
+      "Bash(netstat -ano)",
+      "Bash(find /c/Users/figgm/Documents/Projects/clawfolio -maxdepth 1 -type f \\\\\\(-name .*config* -o -name .*rc* -o -name eslint* \\\\\\))",
+      "Bash(Select-String -Pattern \"drei|fiber|three\")",
+      "Bash(findstr /i \"drei fiber three\")",
+      "Bash(npx tsc:*)",
+      "Bash(del \"C:\\\\Users\\\\figgm\\\\Documents\\\\Projects\\\\clawfolio\\\\src\\\\data\\\\az900-questions.ts\")"
     ]
   }
 }

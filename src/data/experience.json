@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "role": "Senior Full Stack Engineer",
+    "company": "Vercel",
+    "companyUrl": "https://vercel.com",
+    "period": "2023 — Present",
+    "description": [
+      "Lead development of internal deployment tooling serving 100K+ projects, reducing build times by 40% through intelligent caching strategies",
+      "Architected a real-time collaboration feature for the dashboard using WebSockets and CRDTs, adopted by 15K+ teams",
+      "Mentored a team of 4 junior engineers, establishing code review standards and pair programming practices"
+    ]
+  },
+  {
+    "id": 2,
+    "role": "Full Stack Developer",
+    "company": "Stripe",
+    "companyUrl": "https://stripe.com",
+    "period": "2021 — 2023",
+    "description": [
+      "Built and maintained payment processing microservices handling $2B+ in annual transaction volume with 99.99% uptime",
+      "Developed the merchant analytics dashboard using React and D3.js, providing real-time revenue insights to 50K+ businesses",
+      "Implemented automated fraud detection pipelines using Python and TensorFlow, reducing chargebacks by 23%"
+    ]
+  },
+  {
+    "id": 3,
+    "role": "Frontend Engineer",
+    "company": "Figma",
+    "companyUrl": "https://figma.com",
+    "period": "2019 — 2021",
+    "description": [
+      "Contributed to the core editor performance team, optimizing canvas rendering for documents with 10K+ layers",
+      "Built the plugin marketplace frontend and review system, growing the ecosystem to 5K+ community plugins",
+      "Led the migration from legacy CSS to a design token system, improving theming consistency across 200+ components"
+    ]
+  },
+  {
+    "id": 4,
+    "role": "Junior Developer",
+    "company": "Freelance",
+    "companyUrl": null,
+    "period": "2017 — 2019",
+    "description": [
+      "Delivered 30+ client projects ranging from landing pages to full e-commerce platforms using React and Node.js",
+      "Built a white-label SaaS booking system adopted by 12 local businesses, generating $50K+ in recurring revenue",
+      "Developed open-source component libraries with 2K+ GitHub stars and active community contributions"
+    ]
+  }
+]

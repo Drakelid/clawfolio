@@ -1,5 +1,31 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Docker Compose
+
+Create a `.env` file in the project root:
+
+```env
+ADMIN_PASSWORD=changeme
+ADMIN_SECRET=changeme-32-char-random-string-here
+```
+
+Then build and run the app with Docker Compose:
+
+```bash
+docker compose up --build
+# or, on systems with the legacy binary:
+docker-compose up --build
+```
+
+The app will be available at [http://localhost:81](http://localhost:81).
+
+Notes:
+
+- The container runs the production server with `next start`.
+- `./src/data` is bind-mounted into the container, so CMS edits persist across restarts.
+- The repo pins a larger Node heap for `dev`/`build`/`start` to avoid JavaScript out-of-memory crashes during Next.js compilation.
+- Stop the stack with `docker compose down`.
+
 ## Getting Started
 
 First, run the development server:
