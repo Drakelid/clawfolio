@@ -12,6 +12,15 @@ function timingSafeEqual(a: string, b: string): boolean {
   return result === 0;
 }
 
+function shouldUseSecureCookie(request: Request): boolean {
+  const forwardedProto = request.headers.get("x-forwarded-proto");
+  if (forwardedProto) {
+    return forwardedProto.split(",")[0].trim() === "https";
+  }
+
+  return new URL(request.url).protocol === "https:";
+}
+
 export async function POST(request: Request) {
   const body = await request.json().catch(() => null);
   const password = typeof body?.password === "string" ? body.password : "";
@@ -31,7 +40,7 @@ export async function POST(request: Request) {
 
   cookieStore.set(COOKIE_NAME, token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    secure: shouldUseSecureCookie(request),
     sameSite: "strict",
     maxAge: 7 * 24 * 60 * 60,
     path: "/",
