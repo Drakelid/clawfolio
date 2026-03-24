@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, type ChangeEvent } from "react";
 import Toast from "../_components/Toast";
 import { getProjectGallery, normalizeProject } from "@/lib/project-utils";
 import type { Project } from "@/lib/types";
@@ -56,8 +56,11 @@ export default function ProjectsAdminPage() {
   const [isNew, setIsNew] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [uploadingTarget, setUploadingTarget] = useState<"cover" | "gallery" | null>(null);
   const [tagInput, setTagInput] = useState("");
   const [toast, setToast] = useState<ToastState>(null);
+  const coverUploadInputRef = useRef<HTMLInputElement>(null);
+  const galleryUploadInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -211,6 +214,91 @@ export default function ProjectsAdminPage() {
     });
   };
 
+  const uploadProjectImage = async (file: File): Promise<string> => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    if (editing?.title.trim()) {
+      formData.append("projectTitle", editing.title.trim());
+    }
+
+    const res = await fetch("/api/admin/uploads/project-image", {
+      method: "POST",
+      body: formData,
+    });
+    const json = await res.json().catch(() => null);
+
+    if (!res.ok) {
+      throw new Error((json && typeof json === "object" && "error" in json && String(json.error)) || "Failed to upload image");
+    }
+
+    const path =
+      json &&
+      typeof json === "object" &&
+      "data" in json &&
+      json.data &&
+      typeof json.data === "object" &&
+      "path" in json.data &&
+      typeof json.data.path === "string"
+        ? json.data.path
+        : null;
+
+    if (!path) {
+      throw new Error("Upload response did not include an image path");
+    }
+
+    return path;
+  };
+
+  const handleCoverUpload = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file) return;
+
+    setUploadingTarget("cover");
+    try {
+      const path = await uploadProjectImage(file);
+      setEditing((current) => (current ? { ...current, image: path } : current));
+      setToast({ message: "Cover image uploaded", type: "success" });
+    } catch (error) {
+      setToast({
+        message: error instanceof Error ? error.message : "Failed to upload cover image",
+        type: "error",
+      });
+    } finally {
+      setUploadingTarget(null);
+    }
+  };
+
+  const handleGalleryUpload = async (event: ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(event.target.files ?? []);
+    event.target.value = "";
+    if (files.length === 0) return;
+
+    setUploadingTarget("gallery");
+    try {
+      const uploadedPaths: string[] = [];
+      for (const file of files) {
+        uploadedPaths.push(await uploadProjectImage(file));
+      }
+
+      setEditing((current) =>
+        current ? { ...current, gallery: [...current.gallery, ...uploadedPaths] } : current
+      );
+      setToast({
+        message: `${uploadedPaths.length} gallery image${uploadedPaths.length === 1 ? "" : "s"} uploaded`,
+        type: "success",
+      });
+    } catch (error) {
+      setToast({
+        message: error instanceof Error ? error.message : "Failed to upload gallery images",
+        type: "error",
+      });
+    } finally {
+      setUploadingTarget(null);
+    }
+  };
+
   if (loading) {
     return (
       <div className="rounded-2xl border border-[var(--border)] bg-[var(--bg-secondary)] p-6 font-mono text-sm text-[var(--text-muted)]">
@@ -280,12 +368,34 @@ export default function ProjectsAdminPage() {
               <label className={labelClass} style={labelStyle}>
                 Cover Image Path
               </label>
-              <input
-                className={inputClass}
-                style={inputStyle}
-                value={editing.image}
-                onChange={(e) => updateProject("image", e.target.value)}
-              />
+              <div className="space-y-2">
+                <input
+                  className={inputClass}
+                  style={inputStyle}
+                  value={editing.image}
+                  onChange={(e) => updateProject("image", e.target.value)}
+                />
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() => coverUploadInputRef.current?.click()}
+                    disabled={uploadingTarget !== null}
+                    className="rounded-lg border border-[var(--border)] px-3 py-2 font-mono text-xs text-[var(--text-muted)] disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    {uploadingTarget === "cover" ? "Uploading..." : "Upload Cover"}
+                  </button>
+                  <input
+                    ref={coverUploadInputRef}
+                    type="file"
+                    accept="image/png,image/jpeg,image/webp,image/gif,image/avif"
+                    onChange={handleCoverUpload}
+                    className="hidden"
+                  />
+                  <p className="self-center font-mono text-[11px] text-[var(--text-muted)]">
+                    PNG, JPG, WebP, GIF, or AVIF up to 8MB.
+                  </p>
+                </div>
+              </div>
             </div>
             <div>
               <label className={labelClass} style={labelStyle}>
@@ -315,7 +425,7 @@ export default function ProjectsAdminPage() {
                   Gallery Images
                 </label>
                 <p className="font-mono text-xs text-[var(--text-muted)]">
-                  Add extra preview images for the project gallery.
+                  Add extra preview images for the project gallery or upload them directly here.
                 </p>
               </div>
               <button
@@ -325,6 +435,22 @@ export default function ProjectsAdminPage() {
               >
                 + Add Image
               </button>
+              <button
+                type="button"
+                onClick={() => galleryUploadInputRef.current?.click()}
+                disabled={uploadingTarget !== null}
+                className="rounded-lg border border-[var(--border)] px-3 py-2 font-mono text-xs text-[var(--text-muted)] disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {uploadingTarget === "gallery" ? "Uploading..." : "Upload to Gallery"}
+              </button>
+              <input
+                ref={galleryUploadInputRef}
+                type="file"
+                multiple
+                accept="image/png,image/jpeg,image/webp,image/gif,image/avif"
+                onChange={handleGalleryUpload}
+                className="hidden"
+              />
             </div>
 
             <div className="space-y-2">
