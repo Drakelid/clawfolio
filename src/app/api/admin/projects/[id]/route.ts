@@ -1,66 +1,11 @@
-import { getProjects } from "@/lib/data";
+import { getProjectsUncached } from "@/lib/data";
+import { normalizeProject, normalizeProjectPayload } from "@/lib/project-utils";
 import { validateAdminCookie } from "@/lib/server-auth";
 import { writeDataFile } from "@/lib/write";
 import type { Project } from "@/lib/types";
 
 function unauthorized() {
   return Response.json({ error: "Unauthorized" }, { status: 401 });
-}
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null && !Array.isArray(value);
-}
-
-function isString(value: unknown): value is string {
-  return typeof value === "string";
-}
-
-function isStringArray(value: unknown): value is string[] {
-  return Array.isArray(value) && value.every(isString);
-}
-
-function isProjectPayload(value: unknown): Omit<Project, "id"> | null {
-  if (!isRecord(value)) return null;
-
-  const {
-    title,
-    description,
-    image,
-    tags,
-    category,
-    featured,
-    accent,
-    links,
-  } = value;
-
-  if (
-    !isString(title) ||
-    !isString(description) ||
-    !isString(image) ||
-    !isStringArray(tags) ||
-    !isString(category) ||
-    typeof featured !== "boolean" ||
-    !isString(accent) ||
-    !isRecord(links) ||
-    !isString(links.live) ||
-    !isString(links.github)
-  ) {
-    return null;
-  }
-
-  return {
-    title,
-    description,
-    image,
-    tags,
-    category,
-    featured,
-    accent,
-    links: {
-      live: links.live,
-      github: links.github,
-    },
-  };
 }
 
 function parseProjectId(value: string): number | null {
@@ -82,12 +27,20 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
   }
 
   const body = await request.json().catch(() => null);
-  const payload = isProjectPayload(body);
+  const payload = normalizeProjectPayload(body);
   if (!payload) {
     return Response.json({ error: "Invalid project payload" }, { status: 400 });
   }
 
-  const projects = await getProjects();
+  const rawProjects = await getProjectsUncached();
+  const projects = rawProjects
+    .map((project) => normalizeProject(project))
+    .filter((project): project is Project => project !== null);
+
+  if (projects.length !== rawProjects.length) {
+    return Response.json({ error: "Invalid projects data" }, { status: 500 });
+  }
+
   const index = projects.findIndex((project) => project.id === id);
   if (index === -1) {
     return Response.json({ error: "Project not found" }, { status: 404 });
@@ -112,7 +65,15 @@ export async function DELETE(_request: Request, { params }: { params: Promise<{ 
     return Response.json({ error: "Invalid project id" }, { status: 400 });
   }
 
-  const projects = await getProjects();
+  const rawProjects = await getProjectsUncached();
+  const projects = rawProjects
+    .map((project) => normalizeProject(project))
+    .filter((project): project is Project => project !== null);
+
+  if (projects.length !== rawProjects.length) {
+    return Response.json({ error: "Invalid projects data" }, { status: 500 });
+  }
+
   const nextProjects = projects.filter((project) => project.id !== id);
   if (nextProjects.length === projects.length) {
     return Response.json({ error: "Project not found" }, { status: 404 });

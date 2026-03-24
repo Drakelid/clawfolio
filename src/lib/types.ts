@@ -40,6 +40,7 @@ export interface Project {
   title: string;
   description: string;
   image: string;
+  gallery: string[];
   tags: string[];
   category: string;
   featured: boolean;

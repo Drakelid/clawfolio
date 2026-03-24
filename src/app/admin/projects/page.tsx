@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Toast from "../_components/Toast";
+import { getProjectGallery, normalizeProject } from "@/lib/project-utils";
 import type { Project } from "@/lib/types";
 
 type ToastState = { message: string; type: "success" | "error" } | null;
@@ -12,6 +13,7 @@ const EMPTY_PROJECT: Omit<Project, "id"> = {
   title: "",
   description: "",
   image: "",
+  gallery: [],
   tags: [],
   category: "Full Stack",
   featured: false,
@@ -31,6 +33,7 @@ const labelStyle = { color: "var(--text-muted)" };
 function cloneProject(project: Project): Project {
   return {
     ...project,
+    gallery: [...project.gallery],
     tags: [...project.tags],
     links: { ...project.links },
   };
@@ -42,23 +45,9 @@ function normalizeProjects(raw: unknown): Project[] {
     return [];
   }
 
-  return payload.map((project) => {
-    const value = project as Partial<Project>;
-    return {
-      id: Number(value.id ?? 0),
-      title: value.title ?? "",
-      description: value.description ?? "",
-      image: value.image ?? "",
-      tags: Array.isArray(value.tags) ? value.tags.filter((tag): tag is string => typeof tag === "string") : [],
-      category: value.category ?? "Full Stack",
-      featured: Boolean(value.featured),
-      accent: value.accent ?? "#3B82F6",
-      links: {
-        live: value.links?.live ?? "",
-        github: value.links?.github ?? "",
-      },
-    };
-  });
+  return payload
+    .map((project) => normalizeProject(project))
+    .filter((project): project is Project => project !== null);
 }
 
 export default function ProjectsAdminPage() {
@@ -198,6 +187,30 @@ export default function ProjectsAdminPage() {
     setEditing({ ...editing, tags: editing.tags.filter((_, tagIndex) => tagIndex !== index) });
   };
 
+  const addGalleryImage = () => {
+    if (!editing) return;
+
+    setEditing({ ...editing, gallery: [...editing.gallery, ""] });
+  };
+
+  const updateGalleryImage = (index: number, value: string) => {
+    if (!editing) return;
+
+    setEditing({
+      ...editing,
+      gallery: editing.gallery.map((image, imageIndex) => (imageIndex === index ? value : image)),
+    });
+  };
+
+  const removeGalleryImage = (index: number) => {
+    if (!editing) return;
+
+    setEditing({
+      ...editing,
+      gallery: editing.gallery.filter((_, imageIndex) => imageIndex !== index),
+    });
+  };
+
   if (loading) {
     return (
       <div className="rounded-2xl border border-[var(--border)] bg-[var(--bg-secondary)] p-6 font-mono text-sm text-[var(--text-muted)]">
@@ -265,7 +278,7 @@ export default function ProjectsAdminPage() {
           <div className="grid gap-4 md:grid-cols-2">
             <div>
               <label className={labelClass} style={labelStyle}>
-                Image Path
+                Cover Image Path
               </label>
               <input
                 className={inputClass}
@@ -292,6 +305,53 @@ export default function ProjectsAdminPage() {
                   onChange={(e) => updateProject("accent", e.target.value)}
                 />
               </div>
+            </div>
+          </div>
+
+          <div>
+            <div className="mb-3 flex items-center justify-between gap-3">
+              <div>
+                <label className={labelClass} style={labelStyle}>
+                  Gallery Images
+                </label>
+                <p className="font-mono text-xs text-[var(--text-muted)]">
+                  Add extra preview images for the project gallery.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={addGalleryImage}
+                className="rounded-lg border border-[var(--border)] px-3 py-2 font-mono text-xs text-[var(--text-muted)]"
+              >
+                + Add Image
+              </button>
+            </div>
+
+            <div className="space-y-2">
+              {editing.gallery.length === 0 && (
+                <div className="rounded-xl border border-dashed border-[var(--border)] px-4 py-3 font-mono text-xs text-[var(--text-muted)]">
+                  No gallery images yet.
+                </div>
+              )}
+
+              {editing.gallery.map((image, index) => (
+                <div key={`gallery-${index}`} className="flex gap-2">
+                  <input
+                    className={`${inputClass} flex-1`}
+                    style={inputStyle}
+                    placeholder={`/projects/${editing.title || "project"}-${index + 1}.jpg`}
+                    value={image}
+                    onChange={(e) => updateGalleryImage(index, e.target.value)}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeGalleryImage(index)}
+                    className="rounded-lg border border-red-500/20 px-3 py-2 font-mono text-xs text-red-400"
+                  >
+                    Remove
+                  </button>
+                </div>
+              ))}
             </div>
           </div>
 
@@ -459,6 +519,7 @@ export default function ProjectsAdminPage() {
 
             <div className="mb-4 grid gap-2 text-xs font-mono text-[var(--text-muted)]">
               <div>Image: {project.image || "Not set"}</div>
+              <div>Previews: {getProjectGallery(project).length}</div>
               <div>Live: {project.links.live || "Not set"}</div>
               <div>GitHub: {project.links.github || "Not set"}</div>
             </div>

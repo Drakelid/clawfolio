@@ -54,14 +54,26 @@ export async function getSiteData(): Promise<SiteData> {
   return readJsonFile<SiteData>("site.json");
 }
 
+export async function getSiteDataUncached(): Promise<SiteData> {
+  return readJsonFile<SiteData>("site.json");
+}
+
 export async function getProjects(): Promise<Project[]> {
   "use cache";
   cacheTag(PORTFOLIO_TAG);
   return readJsonFile<Project[]>("projects.json");
 }
 
+export async function getProjectsUncached(): Promise<Project[]> {
+  return readJsonFile<Project[]>("projects.json");
+}
+
 export async function getExperience(): Promise<Experience[]> {
   "use cache";
   cacheTag(PORTFOLIO_TAG);
+  return readJsonFile<Experience[]>("experience.json");
+}
+
+export async function getExperienceUncached(): Promise<Experience[]> {
   return readJsonFile<Experience[]>("experience.json");
 }

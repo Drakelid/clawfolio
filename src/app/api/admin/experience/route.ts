@@ -1,4 +1,4 @@
-import { getExperience } from "@/lib/data";
+import { getExperience, getExperienceUncached } from "@/lib/data";
 import { validateAdminCookie } from "@/lib/server-auth";
 import { writeDataFile } from "@/lib/write";
 import type { Experience } from "@/lib/types";
@@ -65,7 +65,7 @@ export async function GET() {
     return unauthorized();
   }
 
-  const experience = await getExperience();
+  const experience = await getExperienceUncached();
   if (!experience.every(isExperience)) {
     return Response.json({ error: "Invalid experience data" }, { status: 500 });
   }

@@ -1,4 +1,4 @@
-import { getSiteData } from "@/lib/data";
+import { getSiteDataUncached } from "@/lib/data";
 import { validateAdminCookie } from "@/lib/server-auth";
 import { writeDataFile } from "@/lib/write";
 import type { SiteData } from "@/lib/types";
@@ -70,7 +70,7 @@ export async function GET() {
     return unauthorized();
   }
 
-  const data = await getSiteData();
+  const data = await getSiteDataUncached();
   return Response.json({ data });
 }
 
