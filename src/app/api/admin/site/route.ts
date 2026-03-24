@@ -54,6 +54,7 @@ function isSiteData(value: unknown): value is SiteData {
     isString(hero.socials.linkedin) &&
     isString(hero.socials.twitter) &&
     isRecord(about) &&
+    isString(about.title) &&
     isStringArray(about.bio) &&
     about.bio.length === 3 &&
     Array.isArray(about.stats) &&

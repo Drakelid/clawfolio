@@ -23,6 +23,7 @@
     }
   },
   "about": {
+    "title": "Who I Am",
     "bio": [
       "I'm a full stack developer who thrives at the intersection of design and engineering.",
       "With 8 years of experience shipping products at companies like Vercel, Stripe, and Figma, I bring a deep understanding of both frontend craft and backend architecture.",

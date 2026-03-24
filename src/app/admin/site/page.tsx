@@ -26,6 +26,7 @@ const EMPTY_DATA: SiteData = {
     socials: { github: "", linkedin: "", twitter: "" },
   },
   about: {
+    title: "",
     bio: ["", "", ""],
     stats: [
       { label: "", value: 0, suffix: "" },
@@ -60,6 +61,7 @@ function cloneData(data: SiteData): SiteData {
     },
     about: {
       ...data.about,
+      title: data.about.title,
       bio: [...data.about.bio],
       stats: data.about.stats.map((stat) => ({ ...stat })),
       techStack: Object.fromEntries(
@@ -99,6 +101,7 @@ function normalizeSiteData(raw: unknown): SiteData {
       },
     },
     about: {
+      title: data.about?.title ?? "",
       bio: Array.isArray(data.about?.bio) ? [...data.about!.bio] : ["", "", ""],
       stats: Array.isArray(data.about?.stats)
         ? data.about!.stats.map((stat) => ({
@@ -215,6 +218,12 @@ export default function SiteAdminPage() {
       bio[index] = value;
       return { ...current, about: { ...current.about, bio } };
     });
+  };
+
+  const updateAboutTitle = (value: string) => {
+    setData((current) =>
+      current ? { ...current, about: { ...current.about, title: value } } : current
+    );
   };
 
   const updateStat = (index: number, key: keyof Stat, value: string) => {
@@ -451,6 +460,18 @@ export default function SiteAdminPage() {
 
       {activeTab === "about" && (
         <section className="space-y-5 rounded-2xl border border-[var(--border)] bg-[var(--bg-secondary)] p-5">
+          <div>
+            <label className={labelClass} style={labelStyle}>
+              Section Heading
+            </label>
+            <input
+              className={inputClass}
+              style={inputStyle}
+              value={data.about.title}
+              onChange={(e) => updateAboutTitle(e.target.value)}
+            />
+          </div>
+
           <div className="grid gap-4">
             {data.about.bio.map((paragraph, index) => (
               <div key={index}>

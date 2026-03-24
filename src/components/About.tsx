@@ -84,7 +84,7 @@ export default function About({ data }: { data: AboutData }) {
               About
             </motion.span>
             <TextReveal className="mb-6 md:mb-8 font-mono text-3xl font-bold text-[var(--text-primary)] sm:text-4xl md:text-5xl">
-              Who I Am
+              {data.title}
             </TextReveal>
 
             <div className="mb-8 space-y-4 text-lg leading-relaxed text-[var(--text-muted)]">

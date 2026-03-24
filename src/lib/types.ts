@@ -19,6 +19,7 @@ export interface Stat {
 }
 
 export interface AboutData {
+  title: string;
   bio: string[];
   stats: Stat[];
   techStack: Record<string, string[]>;
