@@ -17,7 +17,7 @@ docker compose up --build
 docker-compose up --build
 ```
 
-The app will be available at [http://localhost:81](http://localhost:81).
+The app will be available at [http://localhost:1010](http://localhost:1010).
 
 Notes:
 
@@ -40,7 +40,7 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:1010](http://localhost:1010) with your browser to see the result.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 

@@ -18,7 +18,7 @@ FROM node:20-bookworm-slim AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
-ENV PORT=3000
+ENV PORT=1010
 ENV NODE_OPTIONS=--max-old-space-size=2048
 
 COPY package.json package-lock.json ./
@@ -28,6 +28,6 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/src/data ./src/data
 COPY --from=builder /app/next.config.ts ./next.config.ts
 
-EXPOSE 3000
+EXPOSE 1010
 
-CMD ["npm", "run", "start", "--", "--hostname", "0.0.0.0", "--port", "3000"]
+CMD ["npm", "run", "start", "--", "--hostname", "0.0.0.0", "--port", "1010"]
