@@ -10,4 +10,5 @@ services:
       ADMIN_SECRET: ${ADMIN_SECRET}
     volumes:
       - ./src/data:/app/src/data
+      - ./public/uploads:/app/public/uploads
     restart: unless-stopped
