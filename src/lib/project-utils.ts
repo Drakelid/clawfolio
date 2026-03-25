@@ -1,4 +1,5 @@
 import type { Project } from "./types";
+import { withBasePath } from "./base-path";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -35,7 +36,7 @@ export function getProjectGallery(project: {
 }): string[] {
   const image = typeof project.image === "string" ? project.image : "";
   const gallery = Array.isArray(project.gallery) ? project.gallery : [];
-  return cleanGalleryEntries([image, ...gallery]);
+  return cleanGalleryEntries([image, ...gallery]).map((entry) => withBasePath(entry));
 }
 
 export function normalizeProjectPayload(value: unknown): Omit<Project, "id"> | null {

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { withBasePath } from "@/lib/base-path";
 
 const navItems = [
   { href: "/admin/site", label: "Site", hint: "Copy and metadata" },
@@ -40,7 +41,7 @@ export default function AdminLayout({
   const isLoginRoute = pathname === "/admin/login";
 
   const handleLogout = async () => {
-    await fetch("/api/admin/logout", { method: "POST" });
+    await fetch(withBasePath("/api/admin/logout"), { method: "POST" });
     router.push("/admin/login");
     router.refresh();
   };

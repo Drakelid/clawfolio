@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { COOKIE_NAME, verifyToken } from "./lib/auth";
+import { applyBasePath, BASE_PATH } from "./lib/base-path";
 
 function isProtectedRoute(pathname: string): boolean {
   return pathname.startsWith("/admin") || pathname.startsWith("/api/admin");
@@ -11,6 +12,7 @@ function isPassThroughRoute(pathname: string): boolean {
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  const basePath = request.nextUrl.basePath || BASE_PATH;
 
   if (!isProtectedRoute(pathname) || isPassThroughRoute(pathname)) {
     return NextResponse.next();
@@ -22,7 +24,7 @@ export async function proxy(request: NextRequest) {
 
   if (pathname === "/admin/login") {
     if (authenticated) {
-      return NextResponse.redirect(new URL("/admin/site", request.url));
+      return NextResponse.redirect(new URL(applyBasePath("/admin/site", basePath), request.url));
     }
 
     return NextResponse.next();
@@ -36,7 +38,7 @@ export async function proxy(request: NextRequest) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  return NextResponse.redirect(new URL("/admin/login", request.url));
+  return NextResponse.redirect(new URL(applyBasePath("/admin/login", basePath), request.url));
 }
 
 export const config = {

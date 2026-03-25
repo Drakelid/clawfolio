@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Toast from "../_components/Toast";
+import { withBasePath } from "@/lib/base-path";
 import type { SiteData, Stat } from "@/lib/types";
 
 type TabKey = "hero" | "about" | "contact";
@@ -151,7 +152,7 @@ export default function SiteAdminPage() {
 
     async function loadSite() {
       try {
-        const res = await fetch("/api/admin/site", { cache: "no-store" });
+        const res = await fetch(withBasePath("/api/admin/site"), { cache: "no-store" });
         const json = await res.json().catch(() => null);
         if (!res.ok) {
           throw new Error((json && typeof json === "object" && "error" in json && String(json.error)) || "Failed to load site data");
@@ -251,7 +252,7 @@ export default function SiteAdminPage() {
 
     setSaving(true);
     try {
-      const res = await fetch("/api/admin/site", {
+      const res = await fetch(withBasePath("/api/admin/site"), {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
@@ -262,7 +263,9 @@ export default function SiteAdminPage() {
         throw new Error((json && typeof json === "object" && "error" in json && String(json.error)) || "Failed to save site data");
       }
 
-      const refreshed = await fetch("/api/admin/site", { cache: "no-store" }).then((response) => response.json());
+      const refreshed = await fetch(withBasePath("/api/admin/site"), { cache: "no-store" }).then((response) =>
+        response.json()
+      );
       setData(normalizeSiteData(refreshed));
       setToast({ message: "Site content saved", type: "success" });
     } catch (error) {

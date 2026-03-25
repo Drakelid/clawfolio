@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { withBasePath } from "@/lib/base-path";
 
 export default function LoginPage() {
   const [password, setPassword] = useState("");
@@ -15,7 +16,7 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const response = await fetch("/api/admin/auth", {
+      const response = await fetch(withBasePath("/api/admin/auth"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

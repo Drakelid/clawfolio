@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Toast from "../_components/Toast";
+import { withBasePath } from "@/lib/base-path";
 import type { Experience } from "@/lib/types";
 
 type ToastState = { message: string; type: "success" | "error" } | null;
@@ -61,7 +62,7 @@ export default function ExperienceAdminPage() {
 
     async function loadExperience() {
       try {
-        const res = await fetch("/api/admin/experience", { cache: "no-store" });
+        const res = await fetch(withBasePath("/api/admin/experience"), { cache: "no-store" });
         const json = await res.json().catch(() => null);
         if (!res.ok) {
           throw new Error((json && typeof json === "object" && "error" in json && String(json.error)) || "Failed to load experience");
@@ -111,7 +112,9 @@ export default function ExperienceAdminPage() {
 
     setSaving(true);
     try {
-      const url = isNew ? "/api/admin/experience" : `/api/admin/experience/${editing.id}`;
+      const url = isNew
+        ? withBasePath("/api/admin/experience")
+        : withBasePath(`/api/admin/experience/${editing.id}`);
       const method = isNew ? "POST" : "PUT";
       const res = await fetch(url, {
         method,
@@ -124,7 +127,9 @@ export default function ExperienceAdminPage() {
         throw new Error((json && typeof json === "object" && "error" in json && String(json.error)) || "Failed to save experience");
       }
 
-      const refreshed = await fetch("/api/admin/experience", { cache: "no-store" }).then((response) => response.json());
+      const refreshed = await fetch(withBasePath("/api/admin/experience"), { cache: "no-store" }).then((response) =>
+        response.json()
+      );
       setEntries(normalizeExperience(refreshed));
       setEditing(null);
       setIsNew(false);
@@ -143,7 +148,7 @@ export default function ExperienceAdminPage() {
     if (!confirm("Delete this entry?")) return;
 
     try {
-      const res = await fetch(`/api/admin/experience/${id}`, { method: "DELETE" });
+      const res = await fetch(withBasePath(`/api/admin/experience/${id}`), { method: "DELETE" });
       const json = await res.json().catch(() => null);
       if (!res.ok) {
         throw new Error((json && typeof json === "object" && "error" in json && String(json.error)) || "Failed to delete experience");

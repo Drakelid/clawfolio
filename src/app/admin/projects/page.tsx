@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, type ChangeEvent } from "react";
 import Toast from "../_components/Toast";
+import { withBasePath } from "@/lib/base-path";
 import { getProjectGallery, normalizeProject } from "@/lib/project-utils";
 import type { Project } from "@/lib/types";
 
@@ -67,7 +68,7 @@ export default function ProjectsAdminPage() {
 
     async function loadProjects() {
       try {
-        const res = await fetch("/api/admin/projects", { cache: "no-store" });
+        const res = await fetch(withBasePath("/api/admin/projects"), { cache: "no-store" });
         const json = await res.json().catch(() => null);
         if (!res.ok) {
           throw new Error((json && typeof json === "object" && "error" in json && String(json.error)) || "Failed to load projects");
@@ -120,7 +121,9 @@ export default function ProjectsAdminPage() {
 
     setSaving(true);
     try {
-      const url = isNew ? "/api/admin/projects" : `/api/admin/projects/${editing.id}`;
+      const url = isNew
+        ? withBasePath("/api/admin/projects")
+        : withBasePath(`/api/admin/projects/${editing.id}`);
       const method = isNew ? "POST" : "PUT";
       const res = await fetch(url, {
         method,
@@ -133,7 +136,9 @@ export default function ProjectsAdminPage() {
         throw new Error((json && typeof json === "object" && "error" in json && String(json.error)) || "Failed to save project");
       }
 
-      const refreshed = await fetch("/api/admin/projects", { cache: "no-store" }).then((response) => response.json());
+      const refreshed = await fetch(withBasePath("/api/admin/projects"), { cache: "no-store" }).then((response) =>
+        response.json()
+      );
       setProjects(normalizeProjects(refreshed));
       setEditing(null);
       setIsNew(false);
@@ -153,7 +158,7 @@ export default function ProjectsAdminPage() {
     if (!confirm("Delete this project?")) return;
 
     try {
-      const res = await fetch(`/api/admin/projects/${id}`, { method: "DELETE" });
+      const res = await fetch(withBasePath(`/api/admin/projects/${id}`), { method: "DELETE" });
       const json = await res.json().catch(() => null);
       if (!res.ok) {
         throw new Error((json && typeof json === "object" && "error" in json && String(json.error)) || "Failed to delete project");
@@ -222,7 +227,7 @@ export default function ProjectsAdminPage() {
       formData.append("projectTitle", editing.title.trim());
     }
 
-    const res = await fetch("/api/admin/uploads/project-image", {
+    const res = await fetch(withBasePath("/api/admin/uploads/project-image"), {
       method: "POST",
       body: formData,
     });
