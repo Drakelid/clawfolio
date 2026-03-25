@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
+import { withBasePath } from "@/lib/base-path";
 
 export default function AdminIndexPage() {
-  redirect("/admin/site");
+  redirect(withBasePath("/admin/site"));
 }

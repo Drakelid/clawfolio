@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { getSiteData } from "@/lib/data";
+import { withBasePath } from "@/lib/base-path";
 import "./globals.css";
 
 const inter = Inter({
@@ -39,6 +40,9 @@ export async function generateMetadata(): Promise<Metadata> {
       "portfolio",
     ],
     authors: [{ name: siteData.hero.name }],
+    icons: {
+      icon: withBasePath("/favicon.ico"),
+    },
     openGraph: {
       type: "website",
       locale: "en_US",

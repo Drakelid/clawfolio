@@ -31,7 +31,7 @@ export default function LoginPage() {
         return;
       }
 
-      router.replace("/admin/site");
+      router.replace(withBasePath("/admin/site"));
       router.refresh();
     } catch {
       setError("Connection error");

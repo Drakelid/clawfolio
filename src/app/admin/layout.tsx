@@ -42,7 +42,7 @@ export default function AdminLayout({
 
   const handleLogout = async () => {
     await fetch(withBasePath("/api/admin/logout"), { method: "POST" });
-    router.push("/admin/login");
+    router.push(withBasePath("/admin/login"));
     router.refresh();
   };
 
@@ -81,7 +81,7 @@ export default function AdminLayout({
               return (
                 <Link
                   key={item.href}
-                  href={item.href}
+                  href={withBasePath(item.href)}
                   className="group block rounded-2xl border px-4 py-3 transition-colors duration-200"
                   style={{
                     borderColor: active ? "var(--accent)" : "transparent",
@@ -106,7 +106,7 @@ export default function AdminLayout({
 
           <div className="mt-auto space-y-3 pt-6">
             <Link
-              href="/"
+              href={withBasePath("/")}
               target="_blank"
               rel="noreferrer"
               className="flex items-center justify-between rounded-2xl border border-[var(--border)] px-4 py-3 font-mono text-sm text-[var(--text-muted)] transition-colors hover:border-[var(--accent)] hover:text-[var(--text-primary)]"

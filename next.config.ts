@@ -1,10 +1,10 @@
 import path from "path";
 import type { NextConfig } from "next";
 
-const BASE_PATH = "/portfolio";
+const PUBLIC_PATH_PREFIX = "/portfolio";
 
 const nextConfig: NextConfig = {
-  basePath: BASE_PATH,
+  assetPrefix: process.env.NODE_ENV === "production" ? PUBLIC_PATH_PREFIX : undefined,
   cacheComponents: true,
   turbopack: {
     root: path.resolve(__dirname),
