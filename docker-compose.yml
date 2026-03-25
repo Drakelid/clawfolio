@@ -8,20 +8,6 @@ services:
       NODE_OPTIONS: --max-old-space-size=2048
       ADMIN_PASSWORD: ${ADMIN_PASSWORD}
       ADMIN_SECRET: ${ADMIN_SECRET}
-    labels:
-      - traefik.enable=true
-      - traefik.docker.network=proxy
-      - traefik.http.routers.clawfolio-portfolio-http.rule=Host(`fredrikdrakelid.asuscomm.com`) && PathPrefix(`/portfolio`)
-      - traefik.http.routers.clawfolio-portfolio-http.entrypoints=web
-      - traefik.http.routers.clawfolio-portfolio-http.service=clawfolio-portfolio
-      - traefik.http.routers.clawfolio-portfolio-http.middlewares=clawfolio-portfolio-https-redirect
-      - traefik.http.middlewares.clawfolio-portfolio-https-redirect.redirectscheme.scheme=https
-      - traefik.http.routers.clawfolio-portfolio-https.rule=Host(`fredrikdrakelid.asuscomm.com`) && PathPrefix(`/portfolio`)
-      - traefik.http.routers.clawfolio-portfolio-https.entrypoints=websecure
-      - traefik.http.routers.clawfolio-portfolio-https.service=clawfolio-portfolio
-      - traefik.http.routers.clawfolio-portfolio-https.tls=true
-      - traefik.http.routers.clawfolio-portfolio-https.tls.certresolver=le
-      - traefik.http.services.clawfolio-portfolio.loadbalancer.server.port=1010
     volumes:
       - ./src/data:/app/src/data
       - ./public/uploads:/app/public/uploads
@@ -35,10 +21,4 @@ services:
       timeout: 10s
       start_period: 40s
       retries: 3
-    networks:
-      - proxy
     restart: unless-stopped
-
-networks:
-  proxy:
-    external: true
