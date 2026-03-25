@@ -25,6 +25,16 @@ services:
     volumes:
       - ./src/data:/app/src/data
       - ./public/uploads:/app/public/uploads
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - fetch('http://127.0.0.1:1010/portfolio',{redirect:'manual'}).then((response)=>process.exit(response.status===200?0:1)).catch(()=>process.exit(1))
+      interval: 30s
+      timeout: 10s
+      start_period: 40s
+      retries: 3
     networks:
       - proxy
     restart: unless-stopped
