@@ -30,4 +30,7 @@ COPY --from=builder /app/next.config.ts ./next.config.ts
 
 EXPOSE 1010
 
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+  CMD node -e "fetch('http://127.0.0.1:1010/portfolio',{redirect:'manual'}).then((response)=>process.exit(response.status===200?0:1)).catch(()=>process.exit(1))"
+
 CMD ["npm", "run", "start", "--", "--hostname", "0.0.0.0", "--port", "1010"]
