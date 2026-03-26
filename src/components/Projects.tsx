@@ -537,9 +537,6 @@ export default function Projects({ projects }: { projects: Project[] }) {
                           <div className="font-mono text-xs uppercase tracking-[0.2em] text-white/60">
                             Preview {selectedImageIndex + 1} / {selectedGallery.length}
                           </div>
-                          <div className="mt-1 font-mono text-sm text-white/80">
-                            {selectedGallery[selectedImageIndex]}
-                          </div>
                         </div>
 
                         {selectedGallery.length > 1 && (

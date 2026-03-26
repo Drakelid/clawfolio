@@ -20,5 +20,5 @@ export async function writeDataFile(filename: string, data: unknown): Promise<vo
     await fs.rename(tmpPath, filePath);
   }
 
-  revalidateTag("portfolio-data", "max");
+  revalidateTag("portfolio-data", { expire: 0 });
 }
