@@ -194,8 +194,8 @@ export default function Hero({ data }: { data: HeroData }) {
   // Mouse parallax for the content layer
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
-  const springX = useSpring(mouseX, { stiffness: 50, damping: 20 });
-  const springY = useSpring(mouseY, { stiffness: 50, damping: 20 });
+  const springX = useSpring(mouseX, { stiffness: 120, damping: 24, mass: 0.4 });
+  const springY = useSpring(mouseY, { stiffness: 120, damping: 24, mass: 0.4 });
   const taglines = data.taglines.length > 0 ? data.taglines : [""];
   const socialLinks = [
     {
@@ -237,14 +237,14 @@ export default function Hero({ data }: { data: HeroData }) {
       setIsDesktop(window.innerWidth >= 768);
       if (touch) return;
 
-      const handleMouse = (e: MouseEvent) => {
+      const handleMouse = (e: PointerEvent) => {
         const cx = window.innerWidth / 2;
         const cy = window.innerHeight / 2;
         mouseX.set((e.clientX - cx) / cx * 8);
         mouseY.set((e.clientY - cy) / cy * 5);
       };
-      window.addEventListener("mousemove", handleMouse);
-      cleanup = () => window.removeEventListener("mousemove", handleMouse);
+      window.addEventListener("pointermove", handleMouse, { passive: true });
+      cleanup = () => window.removeEventListener("pointermove", handleMouse);
     });
 
     return () => {

@@ -13,15 +13,15 @@ export default function CustomCursor() {
 
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
-  const springX = useSpring(cursorX, { damping: 25, stiffness: 300 });
-  const springY = useSpring(cursorY, { damping: 25, stiffness: 300 });
+  const springX = useSpring(cursorX, { damping: 34, stiffness: 680, mass: 0.18 });
+  const springY = useSpring(cursorY, { damping: 34, stiffness: 680, mass: 0.18 });
 
   useEffect(() => {
     if (isCoarsePointer) {
       return;
     }
 
-    const moveCursor = (e: MouseEvent) => {
+    const moveCursor = (e: PointerEvent) => {
       cursorX.set(e.clientX);
       cursorY.set(e.clientY);
       if (!isVisibleRef.current) {
@@ -48,12 +48,12 @@ export default function CustomCursor() {
       }
     };
 
-    window.addEventListener("mousemove", moveCursor);
+    window.addEventListener("pointermove", moveCursor, { passive: true });
     document.addEventListener("mouseover", handleMouseOver);
     document.addEventListener("mouseout", handleMouseOut);
 
     return () => {
-      window.removeEventListener("mousemove", moveCursor);
+      window.removeEventListener("pointermove", moveCursor);
       document.removeEventListener("mouseover", handleMouseOver);
       document.removeEventListener("mouseout", handleMouseOut);
     };
@@ -74,6 +74,7 @@ export default function CustomCursor() {
           translateX: "-50%",
           translateY: "-50%",
           opacity: isVisible ? 1 : 0,
+          willChange: "transform, width, height, opacity",
         }}
         transition={{ width: { duration: 0.15 }, height: { duration: 0.15 } }}
       />
@@ -86,6 +87,7 @@ export default function CustomCursor() {
           translateX: "-50%",
           translateY: "-50%",
           opacity: isVisible ? 1 : 0,
+          willChange: "transform, width, height, opacity",
         }}
         animate={{
           width: isHovering ? 48 : 32,
